@@ -27,9 +27,14 @@ namespace Client
         public static async Task Main(string[] args)
         {
             Thread.Sleep(3000);
-            var serviceWrapper = new ServiceWrapper();
+            ICustomWareNET serviceWrapper = new ServiceWrapper();
 
-            var res = serviceWrapper.CalculateInterestAmount(new TestCWObject { ID = 101 }) ;
+            //var res = serviceWrapper.CalculateInterestAmount(new TestCWObject { ID = 101 }) ;
+            // var obj = serviceWrapper.LoadObject(typeof(TestCWObject), "123");
+
+            string id = "123";
+           var obj = serviceWrapper.LoadObject<TestCWObject>("111");
+
 
 
             await Console.Out.WriteLineAsync("Press any key...");

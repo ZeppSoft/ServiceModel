@@ -164,7 +164,7 @@ namespace Client
 
         public object LoadObject(Type type, object id)
         {
-            throw new NotImplementedException();
+           return _service.LoadObject(type, id);
         }
 
         public void LogMessage(byte typeID, int threadID, string message, Exception ex)
@@ -259,7 +259,7 @@ namespace Client
 
         T ICustomWareNET.LoadObject<T>(object id)
         {
-            throw new NotImplementedException();
+            return LoadObject(typeof(T), id) as T;
         }
 
         T ICustomWareNET.LoadObject<T>(object id, bool fromDatabase)

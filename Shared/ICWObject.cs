@@ -111,7 +111,7 @@ namespace Shared
 
         public void SetUpdated(bool value)
         {
-            throw new NotImplementedException();
+            int x = 3 + 3;
         }
     }
 }

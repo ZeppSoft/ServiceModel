@@ -16,7 +16,7 @@ namespace ServiceModel
         {
 
             var obj = value as TestCWObject;
-
+            obj.SetUpdated(true);
 
 
             // throw new NotImplementedException();
@@ -110,7 +110,8 @@ namespace ServiceModel
 
         public object LoadObject(Type type, object id)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            return new object();
         }
 
         public void LogMessage(byte typeID, int threadID, string message, Exception ex)
