@@ -228,6 +228,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomWareService.cs" />
+    <Compile Include="CwnetServiceInner.cs" />
     <Compile Include="LoanManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

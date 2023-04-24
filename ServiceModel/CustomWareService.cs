@@ -10,6 +10,7 @@ namespace ServiceModel
 {
     public class CustomWareService : ICustomWareNET
     {
+        private ICustomWareNETInner inner = new CwnetServiceInner();
         public bool IsStarted => throw new NotImplementedException();
 
         public decimal CalculateInterestAmount(ICWObject value)
@@ -110,8 +111,19 @@ namespace ServiceModel
 
         public object LoadObject(Type type, object id)
         {
-            //throw new NotImplementedException();
-            return new object();
+            /*
+            //Using reflection
+            var baseMethod = typeof(ICustomWareNETInner).GetMethod(nameof (ICustomWareNETInner.LoadOrCreate));
+            var genericMethod = baseMethod.MakeGenericMethod(type);
+
+            object[] arr = new object[1];
+            arr[0] = id;
+
+            var v = genericMethod.Invoke(inner, arr);
+            */
+
+            var t = inner.LoadObject<ICWObject>(id,true);
+            return t;
         }
 
         public void LogMessage(byte typeID, int threadID, string message, Exception ex)
