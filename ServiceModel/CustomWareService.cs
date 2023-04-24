@@ -122,6 +122,16 @@ namespace ServiceModel
             var v = genericMethod.Invoke(inner, arr);
             */
 
+            var baseMethod = typeof(ICustomWareNET).GetMethod(nameof(ICustomWareNET.LoadOrCreate));
+            var genericMethod = baseMethod.MakeGenericMethod(type);
+
+            object[] arr = new object[1];
+            arr[0] = id;
+
+            var v = genericMethod.Invoke(this, arr);
+
+
+
             var t = inner.LoadObject<ICWObject>(id,true);
             return t;
         }
@@ -228,7 +238,8 @@ namespace ServiceModel
 
         T ICustomWareNET.LoadOrCreate<T>(object id)
         {
-            throw new NotImplementedException();
+            var obj = Activator.CreateInstance<T>();
+            return obj as T;
         }
 
         T ICustomWareNET.SaveG<T>(T value)
