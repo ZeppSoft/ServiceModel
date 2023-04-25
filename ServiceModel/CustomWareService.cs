@@ -12,6 +12,10 @@ namespace ServiceModel
     {
         private ICustomWareNETInner inner = new CwnetServiceInner();
         public bool IsStarted => throw new NotImplementedException();
+        public void Export(ICWObject value, params object[] parameters)
+        {
+            string test = "Do something";
+        }
         public IList GetLoanOneByOnePaymentSplit(string contractNumber, ref decimal repaymentAmount, decimal penaltyAmount, string paymentCurrency, DateTime? date)
         {
             throw new NotImplementedException();
@@ -75,10 +79,7 @@ namespace ServiceModel
             throw new NotImplementedException();
         }
 
-        public void Export(ICWObject value, params object[] parameters)
-        {
-            throw new NotImplementedException();
-        }
+       
 
         public ICWObject Find(object id, Type type)
         {
@@ -265,6 +266,48 @@ namespace ServiceModel
             throw new NotImplementedException();
         }
 
-       
+        public IList Export(ICWObject value, string Name)
+        {
+            return new List<object>();
+        }
+
+
+
+
+
+
+        public IList GetClientContracts(long clientID, string currency, string sample)
+        {
+            return new List<int>();
+        }
+
+        public IList GetClientContracts(long clientID)
+        {
+            return new List<double>();
+
+        }
+
+        public IList GetClientContracts(long clientID, int[] contractStatusIDs)
+        {
+            return new List<float>();
+
+        }
+
+        public IList GetClientContracts(long clientID, int[] contractStatusIDs, int[] systemContractTypeIDs)
+        {
+            return new List<decimal>();
+
+        }
+
+        public IList GetClientContracts(long clientID, int[] contractStatusIDs, int[] systemContractTypeIDs, int[] contractTypeIDs)
+        {
+            return new List<string>();
+
+        }
+
+        public IList GetClientContracts(long clientID, int[] contractStatusIDs, int[] systemContractTypeIDs, int[] contractTypeIDs, int topContracts, int[] customerContractRelationTypesIDs = null)
+        {
+            return new List<object>();
+        }
     }
 }

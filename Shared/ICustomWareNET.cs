@@ -51,15 +51,23 @@ namespace Shared
         /// </summary>
         /// <param name="value"></param>
         /// 
-        [OperationContract]
-        void Export(ICWObject value);
+        //[OperationContract]
+        //void Export(ICWObject value);
         /// <summary>
         /// Exports the specified value.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <param name="parameters">The parameters.</param>
-        [OperationContract]
+        /// 
+
+
+
+
+
+        [OperationContract(Name ="Params")]
         void Export(ICWObject value, params object[] parameters);
+        [OperationContract(Name = "Name")]
+        IList Export(ICWObject value, string Name);
         /// <summary>
         /// search for objects that are equals to the sample
         /// </summary>
@@ -350,6 +358,26 @@ namespace Shared
 
         [OperationContract]
         IList GetLoanOneByOnePaymentSplit(string contractNumber, ref decimal repaymentAmount, decimal penaltyAmount, string paymentCurrency, DateTime? date);
+
+
+
+
+
+
+        [OperationContract (Name ="Sample")]
+        IList GetClientContracts(long clientID, string currency, string sample);
+        [OperationContract(Name = "ClientId")]
+        IList GetClientContracts(long clientID);
+        [OperationContract(Name = "ContractStatusIDs")]
+        IList GetClientContracts(long clientID, int[] contractStatusIDs);
+        [OperationContract(Name = "SystemContractTypeIDs")]
+        IList GetClientContracts(long clientID, int[] contractStatusIDs, int[] systemContractTypeIDs);
+        [OperationContract(Name = "ContractTypeIDs")]
+        IList GetClientContracts(long clientID, int[] contractStatusIDs, int[] systemContractTypeIDs,
+            int[] contractTypeIDs);
+        [OperationContract(Name = "customerContractRelationTypesIDs")]
+        IList GetClientContracts(long clientID, int[] contractStatusIDs, int[] systemContractTypeIDs,
+            int[] contractTypeIDs, int topContracts, int[] customerContractRelationTypesIDs = null);
     }
 
     [MessagePackFormatter(typeof(ListParamFormatter))]

@@ -51,6 +51,7 @@ namespace ServiceModel
                 new CustomWareService(),
                 options =>
                 {
+                    //options.
                     // set ProtobufMarshaller as default Marshaller
                     options.MarshallerFactory = MessagePackMarshallerFactory.Default;//ProtobufMarshallerFactory.Default;
                 });

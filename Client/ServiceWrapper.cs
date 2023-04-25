@@ -58,6 +58,10 @@ namespace Client
 
        
         public bool IsStarted => throw new NotImplementedException();
+        public void Export(ICWObject value, params object[] parameters)
+        {
+           _service.Export(value, parameters);
+        }
         public IList GetLoanOneByOnePaymentSplit(string contractNumber, ref decimal repaymentAmount, decimal penaltyAmount, string paymentCurrency, DateTime? date)
         {
             throw new NotImplementedException();
@@ -118,15 +122,12 @@ namespace Client
             throw new NotImplementedException();
         }
 
-        public void Export(ICWObject value)
+        IList Export(ICWObject value, string Name)
         {
-            throw new NotImplementedException();
+           return _service.Export(value, Name);
         }
 
-        public void Export(ICWObject value, params object[] parameters)
-        {
-            throw new NotImplementedException();
-        }
+       
 
         public ICWObject Find(object id, Type type)
         {
@@ -290,6 +291,47 @@ namespace Client
             throw new NotImplementedException();
         }
 
-       
+        IList ICustomWareNET.Export(ICWObject value, string Name)
+        {
+          return _service.Export(value, Name);
+        }
+
+
+
+
+
+
+
+
+
+        public IList GetClientContracts(long clientID, string currency, string sample)
+        {
+           return _service.GetClientContracts(clientID, currency, sample);
+        }
+
+        public IList GetClientContracts(long clientID)
+        {
+            return _service.GetClientContracts(clientID);
+        }
+
+        public IList GetClientContracts(long clientID, int[] contractStatusIDs)
+        {
+            return _service.GetClientContracts(clientID, contractStatusIDs);
+        }
+
+        public IList GetClientContracts(long clientID, int[] contractStatusIDs, int[] systemContractTypeIDs)
+        {
+            return _service.GetClientContracts(clientID,contractStatusIDs,systemContractTypeIDs);
+        }
+
+        public IList GetClientContracts(long clientID, int[] contractStatusIDs, int[] systemContractTypeIDs, int[] contractTypeIDs)
+        {
+            return _service.GetClientContracts(clientID,contractStatusIDs,systemContractTypeIDs,contractTypeIDs);
+        }
+
+        public IList GetClientContracts(long clientID, int[] contractStatusIDs, int[] systemContractTypeIDs, int[] contractTypeIDs, int topContracts, int[] customerContractRelationTypesIDs = null)
+        {
+            return _service.GetClientContracts(clientID,contractStatusIDs,systemContractTypeIDs,contractTypeIDs,topContracts,customerContractRelationTypesIDs);
+        }
     }
 }
