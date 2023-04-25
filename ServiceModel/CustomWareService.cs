@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -140,19 +141,26 @@ namespace ServiceModel
 
             var v = genericMethod.Invoke(inner, arr);
             */
-
-            var baseMethod = typeof(ICustomWareNET).GetMethod(nameof(ICustomWareNET.LoadOrCreate));
+            // https://learn.microsoft.com/en-us/dotnet/api/system.type.getmethod?view=netframework-4.8#System_Type_GetMethod_System_String_System_Type___
+            //var baseMethod = typeof(ICustomWareNET).GetMethod(nameof(ICustomWareNET.LoadOrCreate));
+            var baseMethod = typeof(ICustomWareNET).GetMethod(nameof(ICustomWareNET.LoadObject),
+                 BindingFlags.Public | BindingFlags.Instance,
+                  null,
+                   CallingConventions.Any,
+                   new Type[] { typeof(object)},
+                   null);
+            
             var genericMethod = baseMethod.MakeGenericMethod(type);
 
             object[] arr = new object[1];
             arr[0] = id;
 
             var v = genericMethod.Invoke(this, arr);
+            return v;
 
 
-
-            var t = inner.LoadObject<ICWObject>(id,true);
-            return t;
+           // var t = inner.LoadObject<ICWObject>(id,true);
+           // return t;
         }
 
         public void LogMessage(byte typeID, int threadID, string message, Exception ex)
@@ -247,12 +255,14 @@ namespace ServiceModel
 
         T ICustomWareNET.LoadObject<T>(object id)
         {
-            throw new NotImplementedException();
+            var obj = Activator.CreateInstance<T>();
+            return obj as T;
         }
 
         T ICustomWareNET.LoadObject<T>(object id, bool fromDatabase)
         {
-            throw new NotImplementedException();
+            var obj = Activator.CreateInstance<T>();
+            return obj as T;
         }
 
         T ICustomWareNET.LoadOrCreate<T>(object id)

@@ -38,10 +38,10 @@ namespace Client
 
 
             //var res = serviceWrapper.CalculateInterestAmount(new TestCWObject { ID = 101 }) ;
-            // var obj = serviceWrapper.LoadObject(typeof(TestCWObject), "123");
+             //var obj = serviceWrapper.LoadObject(typeof(TestCWObject), "123");
 
             string id = "123";
-            //var obj = serviceWrapper.LoadObject<TestCWObject>("111");
+            var obj = serviceWrapper.LoadObject<TestCWObject>(id);
             var lp = new List<IListParams>();
             lp.Add(new ListParams { Id = 1, Name = "One" });
             lp.Add(new ListParams { Id = 2, Name = "Two" });

@@ -273,7 +273,8 @@ namespace Client
 
         T ICustomWareNET.LoadObject<T>(object id)
         {
-            return LoadObject(typeof(T), id) as T;
+            //return LoadObject(typeof(T), id) as T;
+            return _service.LoadObject(typeof(T), id) as T;
         }
 
         T ICustomWareNET.LoadObject<T>(object id, bool fromDatabase)
