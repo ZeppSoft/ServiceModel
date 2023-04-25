@@ -58,7 +58,18 @@ namespace Client
 
        
         public bool IsStarted => throw new NotImplementedException();
-
+        public IList GetLoanOneByOnePaymentSplit(string contractNumber, ref decimal repaymentAmount, decimal penaltyAmount, string paymentCurrency, DateTime? date)
+        {
+            throw new NotImplementedException();
+        }
+        public (IList list, decimal repaymentAmount) GetLoanOneByOnePaymentSplitTest(string contractNumber,  decimal repaymentAmount, decimal penaltyAmount, string paymentCurrency, DateTime? date)
+        {
+           return _service.GetLoanOneByOnePaymentSplitTest(contractNumber,  repaymentAmount, penaltyAmount, paymentCurrency, date);
+        }
+        public IList GetParams(IList<IListParams> pars, IListParams par)
+        {
+            return _service.GetParams(pars, par);
+        }
         public decimal CalculateInterestAmount(ICWObject value)
         {
             //Type t = value.GetType();
@@ -146,6 +157,8 @@ namespace Client
         {
             throw new NotImplementedException();
         }
+
+       
 
         public byte[] GetPublicKey()
         {
@@ -276,5 +289,7 @@ namespace Client
         {
             throw new NotImplementedException();
         }
+
+       
     }
 }

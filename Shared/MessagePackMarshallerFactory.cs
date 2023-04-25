@@ -159,4 +159,42 @@ namespace Shared
             // var id = options.Resolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
         }
     }
+
+
+    class ListParamFormatter : IMessagePackFormatter<IListParams>
+    {
+        public void Serialize(ref MessagePackWriter writer, IListParams value, MessagePackSerializerOptions options)
+        {
+            options.Resolver.GetFormatterWithVerify<int>().Serialize(ref writer, (int)value.Id, options);
+            options.Resolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Name, options);
+            options.Resolver.GetFormatterWithVerify<Type>().Serialize(ref writer, value.GetType(), options);
+        }
+
+        public IListParams Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options)
+        {
+
+            var id = options.Resolver.GetFormatterWithVerify<int>().Deserialize(ref reader, options);
+            var name = options.Resolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
+            var type = options.Resolver.GetFormatterWithVerify<Type>().Deserialize(ref reader, options);
+
+            var dto = Activator.CreateInstance(type) as IListParams;
+
+            dto.Id = id;
+            dto.Name = name;
+
+            return dto as IListParams;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MessagePack;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -291,51 +292,76 @@ namespace Shared
      //   ISpecialManager SpecialManager { get; }
         [OperationContract]
         void CheckVersion(Version client, TimeZone tz);
-    //    IClientTransaction BeginTransaction();
 
-    //    IMoneyTransfersManager MoneyTransferManager { get; }
+
+
+        [OperationContract]
+        IList GetParams(IList<IListParams> pars, IListParams par);
+
+
+        //    IClientTransaction BeginTransaction();
+
+        //    IMoneyTransfersManager MoneyTransferManager { get; }
 
 
         /// <summary>
         /// Electronic Payment System support manager
         /// </summary>
-      //  IEPSSupportManager EPSSupportManager { get; }
+        //  IEPSSupportManager EPSSupportManager { get; }
 
-     //   IEBankingSupportManager EBankingSupportManager { get; }
+        //   IEBankingSupportManager EBankingSupportManager { get; }
 
-    //    IEBankingLoginManagementManager EBankingLoginManagementManager { get; }
+        //    IEBankingLoginManagementManager EBankingLoginManagementManager { get; }
 
-     //   IEBankingAuthenticatorManagementManager EBankingAuthenticatorManagementManager { get; }
+        //   IEBankingAuthenticatorManagementManager EBankingAuthenticatorManagementManager { get; }
 
 
         /// <summary>
         /// Manager for CustomWare.NET Extentions
         /// </summary>
-      //  IPOSTerminalManager POSTerminalManager { get; }
+        //  IPOSTerminalManager POSTerminalManager { get; }
 
-     //   IDirectDebitOrderManager DirectDebitOrderManager { get; }
+        //   IDirectDebitOrderManager DirectDebitOrderManager { get; }
 
-    //    IEmbargoManager EmbargoManager { get; }
+        //    IEmbargoManager EmbargoManager { get; }
 
-     //   IFingerPrintManager FingerPrintManager { get; }
+        //   IFingerPrintManager FingerPrintManager { get; }
 
-    //    IMBankingManager MBankingManager { get; }
+        //    IMBankingManager MBankingManager { get; }
 
-    //    IAuthenticatorServiceContractManager AuthenticatorServiceContract { get; }
+        //    IAuthenticatorServiceContractManager AuthenticatorServiceContract { get; }
 
-       // IRevenueService RevenueService { get; }
+        // IRevenueService RevenueService { get; }
 
         /// <summary>
         /// Url manager for Intercomputer web service
         /// </summary>
-      //  IIntercomputerUrlManager UrlManager { get; }
+        //  IIntercomputerUrlManager UrlManager { get; }
 
-    //    IDmsManager DmsManager { get; }
-   //     ISwiftManager SwiftManager { get; }
-    //   ISMEmulatorManager SMEmulatorManager { get; }
-    //    IStateMachineManager StateMachine { get; }
-    //    ILAStateMachineManager LAStateMachine { get; }
+        //    IDmsManager DmsManager { get; }
+        //     ISwiftManager SwiftManager { get; }
+        //   ISMEmulatorManager SMEmulatorManager { get; }
+        //    IStateMachineManager StateMachine { get; }
+        //    ILAStateMachineManager LAStateMachine { get; }
 
-  //      IPaymentService PaymentService { get; }
+        //      IPaymentService PaymentService { get; }
+        [OperationContract]
+      (IList list, decimal repaymentAmount) GetLoanOneByOnePaymentSplitTest(string contractNumber,  decimal repaymentAmount, decimal penaltyAmount, string paymentCurrency, DateTime? date);
+
+        [OperationContract]
+        IList GetLoanOneByOnePaymentSplit(string contractNumber, ref decimal repaymentAmount, decimal penaltyAmount, string paymentCurrency, DateTime? date);
+    }
+
+    [MessagePackFormatter(typeof(ListParamFormatter))]
+    public interface IListParams
+    {
+         int Id { get; set; }
+         string Name { get; set; }    
+    }
+
+    public class ListParams : IListParams
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

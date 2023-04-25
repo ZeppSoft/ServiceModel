@@ -5,6 +5,7 @@ using ServiceModel.Grpc.Client;
 using ServiceModel.Grpc.Configuration;
 using Shared;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -19,22 +20,53 @@ namespace Client
 {
     internal class Program
     {
-        //private static readonly IClientFactory DefaultClientFactory = new ClientFactory(new ServiceModelGrpcClientOptions
-        //{
-        //    // set ProtobufMarshaller as default Marshaller
-        //    MarshallerFactory = MessagePackMarshallerFactory.Default //JsonMarshallerFactory.Default//ProtobufMarshallerFactory.Default
-        //});
+        public static string GetCity((string first, string second, int value, string third) cityName)
+        {
+           
+            return cityName.first;
+        }
+
         public static async Task Main(string[] args)
         {
             Thread.Sleep(3000);
             ICustomWareNET serviceWrapper = new ServiceWrapper();
 
+            /*
+            (string first, string second, int value, string third) cities = ("Kyiv","Kharkiv",32,"Sumy");
+            var city = GetCity(cities);
+            */
+
+
             //var res = serviceWrapper.CalculateInterestAmount(new TestCWObject { ID = 101 }) ;
             // var obj = serviceWrapper.LoadObject(typeof(TestCWObject), "123");
 
             string id = "123";
-           var obj = serviceWrapper.LoadObject<TestCWObject>("111");
+            //var obj = serviceWrapper.LoadObject<TestCWObject>("111");
+            var lp = new List<IListParams>();
+            lp.Add(new ListParams { Id = 1, Name = "One" });
+            lp.Add(new ListParams { Id = 2, Name = "Two" });
+            lp.Add(new ListParams { Id = 3, Name = "Three" });
 
+            var single = new ListParams { Id = 4, Name = "Four" };
+
+
+            //IList ls = serviceWrapper.GetParams(lp, single);
+
+            //foreach ( var l in ls ) 
+            //{
+            //}
+
+            string contractNumber = "1";
+
+            decimal repaymentAmount = 10;
+            decimal penaltyAmount = 11;
+            string paymentCurrency = "USD";
+            DateTime? date = new DateTime(2023, 4, 25);
+
+            (IList list, decimal repaymentAmount) res = serviceWrapper.GetLoanOneByOnePaymentSplitTest(contractNumber, repaymentAmount, penaltyAmount, paymentCurrency, date);
+            repaymentAmount = res.repaymentAmount;
+
+            //var t = Tuple.Create(contractNumber, ref repaymentAmount, penaltyAmount, paymentCurrency, date);
 
 
             await Console.Out.WriteLineAsync("Press any key...");

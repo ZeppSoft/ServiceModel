@@ -12,7 +12,23 @@ namespace ServiceModel
     {
         private ICustomWareNETInner inner = new CwnetServiceInner();
         public bool IsStarted => throw new NotImplementedException();
+        public IList GetLoanOneByOnePaymentSplit(string contractNumber, ref decimal repaymentAmount, decimal penaltyAmount, string paymentCurrency, DateTime? date)
+        {
+            throw new NotImplementedException();
+        }
+        public (IList list, decimal repaymentAmount) GetLoanOneByOnePaymentSplitTest(string contractNumber,  decimal repaymentAmount, decimal penaltyAmount, string paymentCurrency, DateTime? date)
+        {
+            IList list =  new List<string> { "Hello" };
+            decimal result = 200;
+            return (list, result);//Tuple.Create(list, result);
+        }
+        public IList GetParams(IList<IListParams> pars, IListParams par)
+        {
+            var ls = new List<int>();
+            ls.Add(23);
 
+            return ls;
+        }
         public decimal CalculateInterestAmount(ICWObject value)
         {
 
@@ -93,6 +109,8 @@ namespace ServiceModel
         {
             throw new NotImplementedException();
         }
+
+       
 
         public byte[] GetPublicKey()
         {
@@ -246,5 +264,7 @@ namespace ServiceModel
         {
             throw new NotImplementedException();
         }
+
+       
     }
 }
