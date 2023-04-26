@@ -55,6 +55,17 @@ namespace ServiceModel
                     // set ProtobufMarshaller as default Marshaller
                     options.MarshallerFactory = MessagePackMarshallerFactory.Default;//ProtobufMarshallerFactory.Default;
                 });
+            _server.Services.AddServiceModelSingleton(
+                new CalculatorNullableInterfaceService(),
+                options =>
+                {
+                    //options.
+                    // set ProtobufMarshaller as default Marshaller
+                    options.MarshallerFactory = MessagePackMarshallerFactory.Default;//ProtobufMarshallerFactory.Default;
+                });
+
+            _server.Services.Add(Greeter.BindService(new GreeterService()));
+
         }
 
         public Task StartAsync(CancellationToken cancellationToken)

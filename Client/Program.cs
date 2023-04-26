@@ -18,6 +18,10 @@ using MessagePackMarshallerFactory = Shared.MessagePackMarshallerFactory;
 
 namespace Client
 {
+    public class BaseTest
+    {
+        public int MyProperty { get; set; }
+    }
     internal class Program
     {
         public static string GetCity((string first, string second, int value, string third) cityName)
@@ -25,11 +29,49 @@ namespace Client
            
             return cityName.first;
         }
-
+        private static readonly IClientFactory DefaultClientFactory = new ClientFactory(new ServiceModelGrpcClientOptions
+        {
+            // set ProtobufMarshaller as default Marshaller
+            MarshallerFactory = MessagePackMarshallerFactory.Default //JsonMarshallerFactory.Default//ProtobufMarshallerFactory.Default
+        });
         public static async Task Main(string[] args)
         {
             Thread.Sleep(3000);
             ICustomWareNET serviceWrapper = new ServiceWrapper();
+
+
+
+            int SelfHostPort = 7000;
+            DefaultClientFactory.AddClient<ICalculator<ICWObject>>(options =>
+            {
+                // setup ServiceModelGrpcClientOptions for this client
+                // by default options contain values from default factory configuration
+                options.MarshallerFactory = MessagePackMarshallerFactory.Default;
+            });
+
+            Console.WriteLine("Call ServerSelfHost");
+            var channel = new Channel("localhost", SelfHostPort, ChannelCredentials.Insecure);
+
+            var _service = DefaultClientFactory.CreateClient<ICalculator<ICWObject>>(channel);
+
+
+            //Native grpc call
+            /*
+            var greetService = new Greeter.GreeterClient(channel);
+            var resp =  greetService.SayHello(new HelloRequest2 {Name = "Test" });
+            */
+
+            // var res = _service.Sum(new TestCWObject { ID = 1 }, new TestCWObject { ID = 2 });
+
+            var res2 = _service.SearchGeneric(new TestCWObject { ID = -100 });
+
+            var to = new BaseTest() { MyProperty = 1 };
+            // var res2 = _service.SearchGeneric(to);
+
+            await Console.Out.WriteLineAsync("Press any key...");
+            Console.ReadLine();
+
+            return;
 
             /*
             (string first, string second, int value, string third) cities = ("Kyiv","Kharkiv",32,"Sumy");
@@ -38,7 +80,7 @@ namespace Client
 
 
             //var res = serviceWrapper.CalculateInterestAmount(new TestCWObject { ID = 101 }) ;
-             //var obj = serviceWrapper.LoadObject(typeof(TestCWObject), "123");
+            //var obj = serviceWrapper.LoadObject(typeof(TestCWObject), "123");
 
             string id = "123";
             var obj = serviceWrapper.LoadObject<TestCWObject>(id);

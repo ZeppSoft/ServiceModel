@@ -60,6 +60,7 @@ namespace Shared
 
         public object ID { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public string Title { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string Code { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public void SetUpdated()
         {
@@ -82,6 +83,8 @@ namespace Shared
         public object ID { get; set; }
         [Key(3)]
         public string Title { get; set; }
+        [Key(4)]
+        public string Code { get ; set; }
 
         public void SetUpdated()
         {
@@ -95,7 +98,7 @@ namespace Shared
      
     }
 
-    public class TestCWObject : ICWObject
+    public class TestCWObject : ICWObject, IHaveCode
     {
         public bool IsDirty => true;
 
@@ -103,6 +106,7 @@ namespace Shared
 
         public object ID { get; set; }
         public string Title { get; set; }
+        public string Code { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public void SetUpdated()
         {

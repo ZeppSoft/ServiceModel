@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace Shared
 {
+    public interface IHaveCode
+    {
+        string Code { get; set; }
+    }
     [ServiceContract]
     public interface ICustomWare
     {

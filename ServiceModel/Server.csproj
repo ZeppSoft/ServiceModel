@@ -227,8 +227,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CalculatorService.cs" />
     <Compile Include="CustomWareService.cs" />
     <Compile Include="CwnetServiceInner.cs" />
+    <Compile Include="GreeterService.cs" />
     <Compile Include="LoanManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
