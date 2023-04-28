@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using ProtoBuf.Meta;
 using ServiceModel.Grpc.Configuration;
+using ServiceModel.Services;
 using Shared;
 using System;
 using System.Collections.Generic;
@@ -47,8 +48,18 @@ namespace ServiceModel
                     options.MarshallerFactory = MessagePackMarshallerFactory.Default;//ProtobufMarshallerFactory.Default;
                 });
 
+
             _server.Services.AddServiceModelSingleton(
-                new CustomWareService(),
+              new SomeManager(),
+              options =>
+              {
+                  //options.
+                  // set ProtobufMarshaller as default Marshaller
+                  options.MarshallerFactory = MessagePackMarshallerFactory.Default;//ProtobufMarshallerFactory.Default;
+              });
+
+            _server.Services.AddServiceModelSingleton(
+                new CustomWareService(new SomeManager()),
                 options =>
                 {
                     //options.
@@ -63,6 +74,8 @@ namespace ServiceModel
                     // set ProtobufMarshaller as default Marshaller
                     options.MarshallerFactory = MessagePackMarshallerFactory.Default;//ProtobufMarshallerFactory.Default;
                 });
+
+           
 
             _server.Services.Add(Greeter.BindService(new GreeterService()));
 

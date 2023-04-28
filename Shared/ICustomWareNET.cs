@@ -1,4 +1,6 @@
 ﻿using MessagePack;
+using MessagePack.Formatters;
+using Shared.Interfaces;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,6 +15,16 @@ namespace Shared
     [ServiceContract]
     public interface ICustomWareNET : ICustomWare
     {
+
+       // [MessagePackFormatter(typeof(TypelessFormatter))]
+        ISomeManager SomeManager
+        {
+            [OperationContract]
+            get;
+            [OperationContract]
+            set;
+
+        }
         [OperationContract]
         int GetApplicationServerID();
         // ICRMManager CRMManager { get; }

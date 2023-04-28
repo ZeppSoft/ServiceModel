@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using ServiceModel.Grpc.Client;
 using Shared;
+using Shared.Interfaces;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -58,6 +59,11 @@ namespace Client
 
        
         public bool IsStarted => throw new NotImplementedException();
+
+        public ISomeManager SomeManager => throw new NotImplementedException();
+
+        ISomeManager ICustomWareNET.SomeManager { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         public void Export(ICWObject value, params object[] parameters)
         {
            _service.Export(value, parameters);

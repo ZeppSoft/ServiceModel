@@ -1,4 +1,6 @@
-﻿using Shared;
+﻿using ServiceModel.Services;
+using Shared;
+using Shared.Interfaces;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,8 +13,25 @@ namespace ServiceModel
 {
     public class CustomWareService : ICustomWareNET
     {
+         ISomeManager _manager;
+        public CustomWareService()
+        {
+            
+        }
+
+        public CustomWareService(ISomeManager sm)
+        {
+            _manager = sm;
+        }
         private ICustomWareNETInner inner = new CwnetServiceInner();
         public bool IsStarted => throw new NotImplementedException();
+
+        public ISomeManager SomeManager
+        {
+            get { return _manager; }
+            set { _manager = value; }
+        }
+
         public void Export(ICWObject value, params object[] parameters)
         {
             string test = "Do something";

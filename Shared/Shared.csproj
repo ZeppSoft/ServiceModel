@@ -128,6 +128,7 @@
     <Compile Include="ICWObject.cs" />
     <Compile Include="IGreetService.cs" />
     <Compile Include="ILoanManager.cs" />
+    <Compile Include="Interfaces\ISomeManager.cs" />
     <Compile Include="ISimple.cs" />
     <Compile Include="LoanApplication.cs" />
     <Compile Include="MessagePackMarshallerFactory.cs" />
@@ -141,7 +142,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Protobuf Include="Protos\greet.proto" GrpcServices="Greeter" />
+    <Protobuf Include="Protos\greet1.proto" GrpcServices="Greeter" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\MessagePackAnalyzer.2.5.108\analyzers\dotnet\MessagePackAnalyzer.dll" />

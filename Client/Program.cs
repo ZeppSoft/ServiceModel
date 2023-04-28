@@ -4,6 +4,7 @@ using ProtoBuf.Meta;
 using ServiceModel.Grpc.Client;
 using ServiceModel.Grpc.Configuration;
 using Shared;
+using Shared.Interfaces;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -52,7 +53,38 @@ namespace Client
             Console.WriteLine("Call ServerSelfHost");
             var channel = new Channel("localhost", SelfHostPort, ChannelCredentials.Insecure);
 
-            var _service = DefaultClientFactory.CreateClient<ICalculator<ICWObject>>(channel);
+            DefaultClientFactory.AddClient<ICustomWareNET>(options =>
+            {
+                options.MarshallerFactory = MessagePackMarshallerFactory.Default;
+            });
+
+            var _service = DefaultClientFactory.CreateClient<ICustomWareNET>(channel);
+            var _sm = DefaultClientFactory.CreateClient<ISomeManager>(channel);
+
+
+            var obk = _sm.GetCWObject("12223");
+
+
+             var amounts = _sm.GetAmounts("123");
+
+            List<RepaymentAmount> ra = new List<RepaymentAmount>();
+
+            foreach (var amount in amounts)
+            {
+                ra.Add(amount as RepaymentAmount);
+            }
+
+            //List<RepaymentAmount> ra = amounts as List<RepaymentAmount>;
+
+            var penalties = _sm.GetPenalty("123");
+
+
+            await Console.Out.WriteLineAsync("Press any key...");
+            Console.ReadLine();
+
+            return;
+
+            // var _service = DefaultClientFactory.CreateClient<ICalculator<ICWObject>>(channel);
 
 
             //Native grpc call
@@ -63,15 +95,12 @@ namespace Client
 
             // var res = _service.Sum(new TestCWObject { ID = 1 }, new TestCWObject { ID = 2 });
 
-            var res2 = _service.SearchGeneric(new TestCWObject { ID = -100 });
+            //var res2 = _service.SearchGeneric(new TestCWObject { ID = -100 });
 
-            var to = new BaseTest() { MyProperty = 1 };
-            // var res2 = _service.SearchGeneric(to);
+            //var to = new BaseTest() { MyProperty = 1 };
+            //// var res2 = _service.SearchGeneric(to);
 
-            await Console.Out.WriteLineAsync("Press any key...");
-            Console.ReadLine();
 
-            return;
 
             /*
             (string first, string second, int value, string third) cities = ("Kyiv","Kharkiv",32,"Sumy");

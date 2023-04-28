@@ -24,7 +24,7 @@ namespace Shared
     /// Internal CustomWare.NET Object Interface. All Object MUST Implement it.
     /// </summary>
     //[MessagePackFormatter(typeof(TypelessFormatter))]
-    [MessagePackFormatter(typeof(CWObjectFormatter))]
+   // [MessagePackFormatter(typeof(CWObjectFormatter))]
     public interface ICWObject : IIDTitleObject
     {
         /// <summary>
@@ -106,7 +106,7 @@ namespace Shared
 
         public object ID { get; set; }
         public string Title { get; set; }
-        public string Code { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string Code { get ; set; }
 
         public void SetUpdated()
         {
