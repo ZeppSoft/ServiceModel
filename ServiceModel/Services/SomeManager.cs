@@ -36,6 +36,25 @@ namespace ServiceModel.Services
             return $"Hello, {personId}!";
         }
 
+        public IList GetPenalties(string la)
+        {
+            //List<PenaltyAmount> ras = new List<PenaltyAmount>();
+
+            //ras.Add(new PenaltyAmount { Amount = 133, Tax = 233 });
+            //ras.Add(new PenaltyAmount { Amount = 333, Tax = 433 });
+            //ras.Add(new PenaltyAmount { Amount = 533, Tax = 633 });
+            //ras.Add(new PenaltyAmount { Amount = 733, Tax = 833 });
+            //ras.Add(new PenaltyAmount { Amount = 933, Tax = 1033 });
+
+            List<TestCWObject> ras = new List<TestCWObject>();
+            ras.Add(new TestCWObject { Code = la, ID = 31, Title = "New" });
+            ras.Add(new TestCWObject { Code = la, ID = 32, Title = "New2" });
+            ras.Add(new TestCWObject { Code = la, ID = 33, Title = "New3" });
+
+
+            return ras;
+        }
+
         public PenaltyAmount GetPenalty(string la)
         {
             return new PenaltyAmount { Amount = 333, Tax= 50 };

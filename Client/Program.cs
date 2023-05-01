@@ -1,5 +1,8 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using MessagePack.Formatters;
+using MessagePack.Resolvers;
+using MessagePack;
 using ProtoBuf.Meta;
 using ServiceModel.Grpc.Client;
 using ServiceModel.Grpc.Configuration;
@@ -15,7 +18,8 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using MessagePackMarshallerFactory = Shared.MessagePackMarshallerFactory;
+using MessagePackMarshallerFactory = ServiceModel.Grpc.Configuration.MessagePackMarshallerFactory;
+//using MessagePackMarshallerFactory = Shared.MessagePackMarshallerFactory;
 
 namespace Client
 {
@@ -40,9 +44,28 @@ namespace Client
             Thread.Sleep(3000);
             ICustomWareNET serviceWrapper = new ServiceWrapper();
 
-
-
             int SelfHostPort = 7000;
+
+            IReadOnlyList<IMessagePackFormatter> formatters =
+               new List<IMessagePackFormatter> { MessagePack.Formatters.TypelessFormatter.Instance, new CWObjectFormatter(), new IListFormatter() };
+
+
+
+            IReadOnlyList<IFormatterResolver> resolvers =
+                new List<IFormatterResolver> { ContractlessStandardResolver.Instance, StandardResolver.Instance, TypelessContractlessStandardResolver.Instance };
+
+
+
+
+            var resolver = MessagePack.Resolvers.CompositeResolver.Create(
+                            formatters,
+                        resolvers);
+
+
+            var opt = MessagePackSerializerOptions.Standard.WithResolver(resolver);
+
+
+
             DefaultClientFactory.AddClient<ICalculator<ICWObject>>(options =>
             {
                 // setup ServiceModelGrpcClientOptions for this client
@@ -59,22 +82,41 @@ namespace Client
             });
 
             var _service = DefaultClientFactory.CreateClient<ICustomWareNET>(channel);
+
+
+
+
+            DefaultClientFactory.AddClient<ISomeManager>(options =>
+            {
+                // setup ServiceModelGrpcClientOptions for this client
+                // by default options contain values from default factory configuration
+                options.MarshallerFactory = new MessagePackMarshallerFactory(opt);//  = MessagePackMarshallerFactory.Default.;
+            });
+
+
             var _sm = DefaultClientFactory.CreateClient<ISomeManager>(channel);
 
 
             var obk = _sm.GetCWObject("12223");
 
 
-             var amounts = _sm.GetAmounts("123");
+            //var amounts = _sm.GetAmounts("123");
 
-            List<RepaymentAmount> ra = new List<RepaymentAmount>();
+            //List<RepaymentAmount> amounts = _sm.GetAmounts("123") as List<RepaymentAmount>;
 
-            foreach (var amount in amounts)
-            {
-                ra.Add(amount as RepaymentAmount);
-            }
+            // List<PenaltyAmount> pen = _sm.GetPenalties("123") as List<PenaltyAmount>; 
 
-            //List<RepaymentAmount> ra = amounts as List<RepaymentAmount>;
+            List<TestCWObject> pen = _sm.GetPenalties("123") as List<TestCWObject>;
+
+
+            //      List<RepaymentAmount> ra = new List<RepaymentAmount>();
+
+            //foreach (var amount in amounts)
+            //{
+            //    ra.Add(amount as RepaymentAmount);
+            //}
+
+            //  List<RepaymentAmount> ra = amounts as List<RepaymentAmount>;
 
             var penalties = _sm.GetPenalty("123");
 

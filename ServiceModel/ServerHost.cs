@@ -1,4 +1,7 @@
 ﻿using Grpc.Core;
+using MessagePack.Formatters;
+using MessagePack.Resolvers;
+using MessagePack;
 using Microsoft.Extensions.Hosting;
 using ProtoBuf.Meta;
 using ServiceModel.Grpc.Configuration;
@@ -10,7 +13,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using MessagePackMarshallerFactory = Shared.MessagePackMarshallerFactory;
+using MessagePackMarshallerFactory = ServiceModel.Grpc.Configuration.MessagePackMarshallerFactory;
+//using MessagePackMarshallerFactory = Shared.MessagePackMarshallerFactory;
 
 namespace ServiceModel
 {
@@ -31,6 +35,24 @@ namespace ServiceModel
 
             RuntimeTypeModel.Default.Add(typeof(Any.Container), false).SetSurrogate(typeof(Any));
 
+            IReadOnlyList<IMessagePackFormatter> formatters =
+              new List<IMessagePackFormatter> { MessagePack.Formatters.TypelessFormatter.Instance, new CWObjectFormatter(), new IListFormatter() };
+
+
+
+            IReadOnlyList<IFormatterResolver> resolvers =
+                new List<IFormatterResolver> { ContractlessStandardResolver.Instance, StandardResolver.Instance, TypelessContractlessStandardResolver.Instance };
+
+
+
+
+            var resolver = MessagePack.Resolvers.CompositeResolver.Create(
+                            formatters,
+                        resolvers);
+
+
+            var opt = MessagePackSerializerOptions.Standard.WithResolver(resolver);
+
 
             _server.Services.AddServiceModelSingleton(
                 new LoanService(),
@@ -45,7 +67,7 @@ namespace ServiceModel
                 options =>
                 {
                     // set ProtobufMarshaller as default Marshaller
-                    options.MarshallerFactory = MessagePackMarshallerFactory.Default;//ProtobufMarshallerFactory.Default;
+                    options.MarshallerFactory = new MessagePackMarshallerFactory(opt);//MessagePackMarshallerFactory.Default;//ProtobufMarshallerFactory.Default;
                 });
 
 
@@ -55,7 +77,8 @@ namespace ServiceModel
               {
                   //options.
                   // set ProtobufMarshaller as default Marshaller
-                  options.MarshallerFactory = MessagePackMarshallerFactory.Default;//ProtobufMarshallerFactory.Default;
+                  options.MarshallerFactory = new MessagePackMarshallerFactory(opt);
+                  //options.MarshallerFactory = MessagePackMarshallerFactory.Default;//ProtobufMarshallerFactory.Default;
               });
 
             _server.Services.AddServiceModelSingleton(
@@ -64,7 +87,8 @@ namespace ServiceModel
                 {
                     //options.
                     // set ProtobufMarshaller as default Marshaller
-                    options.MarshallerFactory = MessagePackMarshallerFactory.Default;//ProtobufMarshallerFactory.Default;
+                    options.MarshallerFactory = new MessagePackMarshallerFactory(opt);
+                    //options.MarshallerFactory = MessagePackMarshallerFactory.Default;//ProtobufMarshallerFactory.Default;
                 });
             _server.Services.AddServiceModelSingleton(
                 new CalculatorNullableInterfaceService(),
@@ -72,7 +96,8 @@ namespace ServiceModel
                 {
                     //options.
                     // set ProtobufMarshaller as default Marshaller
-                    options.MarshallerFactory = MessagePackMarshallerFactory.Default;//ProtobufMarshallerFactory.Default;
+                    options.MarshallerFactory = new MessagePackMarshallerFactory(opt);
+                    //options.MarshallerFactory = MessagePackMarshallerFactory.Default;//ProtobufMarshallerFactory.Default;
                 });
 
            

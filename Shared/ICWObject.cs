@@ -98,7 +98,7 @@ namespace Shared
      
     }
 
-    public class TestCWObject : ICWObject, IHaveCode
+    public class TestCWObject : ICWObject//, IHaveCode
     {
         public bool IsDirty => true;
 

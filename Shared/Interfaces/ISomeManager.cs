@@ -25,17 +25,24 @@ namespace Shared.Interfaces
         IList GetAmounts (string la);
 
         [OperationContract]
+        IList GetPenalties(string la);
+
+        [OperationContract]
         PenaltyAmount GetPenalty(string la);
 
         [OperationContract]
         ICWObject GetCWObject(string la);
     }
 
+
+
+  
+
     //[MessagePackFormatter(typeof(RepaymentAmountFormatter))]
     // [MessagePackObject(keyAsPropertyName: true)]
     //[MessagePackFormatter(typeof(TypelessFormatter))]
 
-   // [MessagePackObject]
+    // [MessagePackObject]
     public class RepaymentAmount
     {
      //   [Key(0)]
