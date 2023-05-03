@@ -1,6 +1,7 @@
 ﻿using MessagePack;
 using Shared;
 using Shared.Interfaces;
+using Shared.Objects;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,6 +25,11 @@ namespace ServiceModel.Services
 
             return ras;
 
+        }
+
+        public Complex GetComplexObject()
+        {
+            return new Complex();
         }
 
         public ICWObject GetCWObject(string la)

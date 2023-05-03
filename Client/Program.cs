@@ -97,6 +97,11 @@ namespace Client
             var _sm = DefaultClientFactory.CreateClient<ISomeManager>(channel);
 
 
+            var co = _sm.GetComplexObject();
+
+            var t = co.IntProp;
+
+
             var obk = _sm.GetCWObject("12223");
 
 
@@ -106,7 +111,7 @@ namespace Client
 
             // List<PenaltyAmount> pen = _sm.GetPenalties("123") as List<PenaltyAmount>; 
 
-            List<TestCWObject> pen = _sm.GetPenalties("123") as List<TestCWObject>;
+          //  List<TestCWObject> pen = _sm.GetPenalties("123") as List<TestCWObject>;
 
 
             //      List<RepaymentAmount> ra = new List<RepaymentAmount>();

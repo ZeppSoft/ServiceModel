@@ -1,5 +1,6 @@
 ﻿using MessagePack;
 using MessagePack.Formatters;
+using Shared.Objects;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -32,6 +33,9 @@ namespace Shared.Interfaces
 
         [OperationContract]
         ICWObject GetCWObject(string la);
+
+        [OperationContract]
+        Complex GetComplexObject();
     }
 
 
