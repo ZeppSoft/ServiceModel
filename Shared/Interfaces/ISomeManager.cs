@@ -69,4 +69,9 @@ namespace Shared.Interfaces
         public string FirstName { get; set;}
         public string LastName { get; set;}
     }
+
+    public class TestPersonSerialized
+    {
+        public string Name { get; set; }
+    }
 }

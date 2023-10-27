@@ -53,21 +53,113 @@ namespace Client
         {
             try
             {
+                OnRequest(context);
+
                 // invoke all other filters in the stack and do service call
                 next();
             }
             catch (Exception ex)
             {
-                //OnError(context, logger, ex);
+                OnError(context, ex);
                 throw;
             }
 
+            OnResponse(context);
         }
 
         public ValueTask InvokeAsync(IClientFilterContext context, Func<ValueTask> next)
         {
             throw new NotImplementedException();
         }
+
+
+        public  void OnRequest(IClientFilterContext context)
+        {
+            // log input
+            //LogBegin(logger, context.Request);
+
+
+            if (context.Request.Count >0)
+            {
+
+                var ar = context.Request.ToArray();
+
+                //foreach (var item in context.Request)
+                    for (int i = 0; i < ar.Length; i++)
+                    {
+                    try
+                    {
+                        var person = ar[i].Value as TestPerson;
+
+                        if (person != null)
+                        {
+                          var ser =  PersonSerializeHelper.DoConvert(person);
+                          ar[i] = new KeyValuePair<string,object>(ar[i].Key, ser); 
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                        throw;
+                    }
+                    
+                }
+            }
+
+           
+        }
+
+        public void OnResponse(IClientFilterContext context)
+        {
+
+            if (context.Response.IsProvided)
+            {
+                if (context.Response.Count > 0)
+                {
+                    var ar = context.Response.ToArray();
+
+                    for (int i = 0; i < ar.Length; i++)
+                    {
+                        try
+                        {
+                            var ser = ar[i].Value as TestPersonSerialized;
+
+                            if (ser != null)
+                            {
+                                var person = PersonSerializeHelper.DoDeConvert(ser);
+                                ar[i] = new KeyValuePair<string, object>(ar[i].Key, person);
+                            }
+                        }
+                        catch (Exception)
+                        {
+
+                            throw;
+                        }
+
+                    }
+
+
+                }
+            }
+            else
+            {
+                // warn: the service method was not called
+                //logger.LogWarning(message.ToString());
+            }
+
+            // log server stream in case of Server/Duplex streaming
+
+
+            // log output
+            //LogEnd(logger, context.Response);
+        }
+
+        public void OnError(IClientFilterContext context,Exception error)
+        {
+            // log exception
+           // logger.LogError("error {0} failed: {1}", context.ContractMethodInfo.Name, error);
+        }
+
     }
 
 
@@ -141,7 +233,7 @@ namespace Client
                 // setup ServiceModelGrpcClientOptions for this client
                 // by default options contain values from default factory configuration
                 options.MarshallerFactory = new MessagePackMarshallerFactory(opt);//  = MessagePackMarshallerFactory.Default.;
-                options.Filters.Add(1,new ClientFilter1());
+                //options.Filters.Add(1,new ClientFilter1());
                 options.Filters.Add(2, new ClientFilter2());
 
             });

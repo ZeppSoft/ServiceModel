@@ -369,12 +369,41 @@ namespace Shared
     }
 
 
+    public class TestPersonSerializedFormatter : IMessagePackFormatter<TestPersonSerialized>
+    {
+        public void Serialize(ref MessagePackWriter writer, TestPersonSerialized value, MessagePackSerializerOptions options)
+        {
+            options.Resolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.Name, options);
+        }
+
+        public TestPersonSerialized Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options)
+        {
+            var name = options.Resolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
+
+            var person = new TestPersonSerialized() { Name = name };
+            return person;
+        }
+    }
 
 
+    public static class PersonSerializeHelper
+    {
+        public static TestPersonSerialized DoConvert(TestPerson person)
+        {
+            var ser = new TestPersonSerialized();
+            ser.Name = person.FirstName + "_" + person.LastName;
+            return ser;
+        }
 
-
-
-
+        public static TestPerson DoDeConvert(TestPersonSerialized ser)
+        {
+            string[] words = ser.Name.Split('_');
+            var person = new TestPerson();
+            person.FirstName = words[0];
+            person.LastName = words[1];
+            return person;
+        }
+    }
 
 
 
