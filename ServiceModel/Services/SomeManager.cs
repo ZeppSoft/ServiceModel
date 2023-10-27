@@ -66,6 +66,11 @@ namespace ServiceModel.Services
             return new PenaltyAmount { Amount = 333, Tax= 50 };
         }
 
+        public TestPerson GetTestPerson()
+        {
+           return new TestPerson() {FirstName ="John",LastName = "Tiner" };
+        }
+
         public int Sum(int x, int y)
         {
             return x + y;

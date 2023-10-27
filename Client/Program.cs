@@ -19,10 +19,59 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using MessagePackMarshallerFactory = ServiceModel.Grpc.Configuration.MessagePackMarshallerFactory;
+using ServiceModel.Grpc.Filters;
 //using MessagePackMarshallerFactory = Shared.MessagePackMarshallerFactory;
 
 namespace Client
 {
+
+    internal class ClientFilter1 : IClientFilter
+    {
+        public void Invoke(IClientFilterContext context, Action next)
+        {
+            try
+            {
+                // invoke all other filters in the stack and do service call
+                next();
+            }
+            catch (Exception ex)
+            {
+                //OnError(context, logger, ex);
+                throw;
+            }
+
+        }
+
+        public ValueTask InvokeAsync(IClientFilterContext context, Func<ValueTask> next)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    internal class ClientFilter2 : IClientFilter
+    {
+        public void Invoke(IClientFilterContext context, Action next)
+        {
+            try
+            {
+                // invoke all other filters in the stack and do service call
+                next();
+            }
+            catch (Exception ex)
+            {
+                //OnError(context, logger, ex);
+                throw;
+            }
+
+        }
+
+        public ValueTask InvokeAsync(IClientFilterContext context, Func<ValueTask> next)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+
+
     public class BaseTest
     {
         public int MyProperty { get; set; }
@@ -38,6 +87,7 @@ namespace Client
         {
             // set ProtobufMarshaller as default Marshaller
             MarshallerFactory = MessagePackMarshallerFactory.Default //JsonMarshallerFactory.Default//ProtobufMarshallerFactory.Default
+            
         });
         public static async Task Main(string[] args)
         {
@@ -47,7 +97,7 @@ namespace Client
             int SelfHostPort = 7000;
 
             IReadOnlyList<IMessagePackFormatter> formatters =
-               new List<IMessagePackFormatter> { MessagePack.Formatters.TypelessFormatter.Instance, new CWObjectFormatter(), new IListFormatter() };
+               new List<IMessagePackFormatter> { MessagePack.Formatters.TypelessFormatter.Instance, new CWObjectFormatter(), new IListFormatter(), new TestPersonFormatter() };
 
 
 
@@ -91,18 +141,26 @@ namespace Client
                 // setup ServiceModelGrpcClientOptions for this client
                 // by default options contain values from default factory configuration
                 options.MarshallerFactory = new MessagePackMarshallerFactory(opt);//  = MessagePackMarshallerFactory.Default.;
+                options.Filters.Add(1,new ClientFilter1());
+                options.Filters.Add(2, new ClientFilter2());
+
             });
 
 
             var _sm = DefaultClientFactory.CreateClient<ISomeManager>(channel);
 
 
-            var co = _sm.GetComplexObject();
+            var person = _sm.GetTestPerson();
+            var penalties = _sm.GetPenalty("123");
 
-            var t = co.IntProp;
 
 
-            var obk = _sm.GetCWObject("12223");
+            //var co = _sm.GetComplexObject();
+
+            //var t = co.IntProp;
+
+
+            //var obk = _sm.GetCWObject("12223");
 
 
             //var amounts = _sm.GetAmounts("123");
@@ -111,7 +169,7 @@ namespace Client
 
             // List<PenaltyAmount> pen = _sm.GetPenalties("123") as List<PenaltyAmount>; 
 
-          //  List<TestCWObject> pen = _sm.GetPenalties("123") as List<TestCWObject>;
+            //  List<TestCWObject> pen = _sm.GetPenalties("123") as List<TestCWObject>;
 
 
             //      List<RepaymentAmount> ra = new List<RepaymentAmount>();
@@ -123,7 +181,6 @@ namespace Client
 
             //  List<RepaymentAmount> ra = amounts as List<RepaymentAmount>;
 
-            var penalties = _sm.GetPenalty("123");
 
 
             await Console.Out.WriteLineAsync("Press any key...");

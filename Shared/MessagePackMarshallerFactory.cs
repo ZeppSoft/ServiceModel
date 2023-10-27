@@ -5,6 +5,7 @@ using MessagePack.Formatters;
 using MessagePack.Resolvers;
 using ProtoBuf.Serializers;
 using ServiceModel.Grpc.Configuration;
+using ServiceModel.Grpc.Filters;
 using Shared.Interfaces;
 using System;
 using System.Collections;
@@ -346,6 +347,39 @@ namespace Shared
 
 
 
+
+
+    public class TestPersonFormatter : IMessagePackFormatter<TestPerson>
+    {
+        public void Serialize(ref MessagePackWriter writer, TestPerson value, MessagePackSerializerOptions options)
+        {
+
+            options.Resolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.FirstName, options);
+            options.Resolver.GetFormatterWithVerify<string>().Serialize(ref writer, value.LastName, options);
+        }
+
+        public TestPerson Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options)
+        {
+            var firstName = options.Resolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
+            var lastName = options.Resolver.GetFormatterWithVerify<string>().Deserialize(ref reader, options);
+           
+            var person = new TestPerson() { FirstName  = firstName,LastName = lastName};
+            return person;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
     // serialize/deserialize internal field.
     public class CWObjectFormatter : IMessagePackFormatter<ICWObject>
     {
@@ -458,11 +492,24 @@ namespace Shared
 
 
 
+    
 
 
+    //internal class ServerFilter1 : IServerFilter
+    //{
+    //    public ValueTask InvokeAsync(IServerFilterContext context, Func<ValueTask> next)
+    //    {
+    //        return next();
+    //    }
+    //}
 
 
-
-
+    //internal class ServerFilter2 : IServerFilter
+    //{
+    //    public ValueTask InvokeAsync(IServerFilterContext context, Func<ValueTask> next)
+    //    {
+    //        return next();
+    //    }
+    //}
 
 }

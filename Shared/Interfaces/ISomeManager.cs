@@ -36,6 +36,9 @@ namespace Shared.Interfaces
 
         [OperationContract]
         Complex GetComplexObject();
+
+        [OperationContract]
+        TestPerson GetTestPerson();
     }
 
 
@@ -60,5 +63,10 @@ namespace Shared.Interfaces
     {
         public decimal Amount { get; set;}
         public decimal Tax { get; set;} 
+    }
+    public class TestPerson
+    {
+        public string FirstName { get; set;}
+        public string LastName { get; set;}
     }
 }
