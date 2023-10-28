@@ -79,56 +79,68 @@ namespace Client
             //LogBegin(logger, context.Request);
 
 
-            if (context.Request.Count >0)
+            if (context.Request.Count > 0)
             {
 
-                var ar = context.Request.ToArray();
+                // var ar = context.Request.ToArray();
 
                 //foreach (var item in context.Request)
-                    for (int i = 0; i < ar.Length; i++)
-                    {
+                for (int i = 0; i < context.Request.Count; i++)
+                {
                     try
                     {
-                        var person = ar[i].Value as TestPerson;
-
-                        if (person != null)
+                        var item = context.Request[i] as ICWObject;
+                        if (item != null)
                         {
-                          var ser =  PersonSerializeHelper.DoConvert(person);
-                          ar[i] = new KeyValuePair<string,object>(ar[i].Key, ser); 
+                            var ser = PersonSerializeHelper.DoConvert(item);
+                            context.Response[i] = ser;
+
+                           
                         }
+
+
+                        //if (ser != null)
+                        //{
+                        //    var person = PersonSerializeHelper.DoDeConvert(ser);
+                        //    ar[i] = new KeyValuePair<string, object>(ar[i].Key, person);
+                        //}
                     }
                     catch (Exception)
                     {
 
                         throw;
                     }
-                    
+
                 }
             }
 
-           
+
         }
 
         public void OnResponse(IClientFilterContext context)
         {
-
             if (context.Response.IsProvided)
             {
                 if (context.Response.Count > 0)
                 {
-                    var ar = context.Response.ToArray();
 
-                    for (int i = 0; i < ar.Length; i++)
+                    for (int i = 0; i < context.Response.Count; i++)
                     {
                         try
                         {
-                            var ser = ar[i].Value as TestPersonSerialized;
-
-                            if (ser != null)
+                            var item = context.Response[i] as ICWObject;
+                            if (item != null)
                             {
-                                var person = PersonSerializeHelper.DoDeConvert(ser);
-                                ar[i] = new KeyValuePair<string, object>(ar[i].Key, person);
+                                var person = PersonSerializeHelper.DoDeConvert(item);
+                                context.Response[i] = person;
                             }
+
+
+                            //if (ser != null)
+                            //{
+                            //    var person = PersonSerializeHelper.DoDeConvert(ser);
+                            //    ar[i] = new KeyValuePair<string, object>(ar[i].Key, person);
+                            //}
                         }
                         catch (Exception)
                         {
@@ -138,20 +150,8 @@ namespace Client
 
                     }
 
-
                 }
             }
-            else
-            {
-                // warn: the service method was not called
-                //logger.LogWarning(message.ToString());
-            }
-
-            // log server stream in case of Server/Duplex streaming
-
-
-            // log output
-            //LogEnd(logger, context.Response);
         }
 
         public void OnError(IClientFilterContext context,Exception error)
@@ -189,7 +189,7 @@ namespace Client
             int SelfHostPort = 7000;
 
             IReadOnlyList<IMessagePackFormatter> formatters =
-               new List<IMessagePackFormatter> { MessagePack.Formatters.TypelessFormatter.Instance, new CWObjectFormatter(), new IListFormatter(), new TestPersonFormatter() };
+               new List<IMessagePackFormatter> { MessagePack.Formatters.TypelessFormatter.Instance, /*new CWObjectFormatter(), new IListFormatter(),*/ new TestPersonSerializedFormatter() };
 
 
 

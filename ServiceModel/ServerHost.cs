@@ -49,7 +49,7 @@ namespace ServiceModel
             var serviceProvider = services.BuildServiceProvider();
 
             IReadOnlyList<IMessagePackFormatter> formatters =
-              new List<IMessagePackFormatter> { MessagePack.Formatters.TypelessFormatter.Instance, new CWObjectFormatter(), new IListFormatter(), new TestPersonFormatter() };
+              new List<IMessagePackFormatter> { MessagePack.Formatters.TypelessFormatter.Instance, /*new CWObjectFormatter(), new IListFormatter(),*/ new TestPersonSerializedFormatter() };
 
 
 
@@ -173,20 +173,26 @@ namespace ServiceModel
             if (context.Request.Count > 0)
             {
 
-                var ar = context.Request.ToArray();
+               // var ar = context.Request.ToArray();
 
                 //foreach (var item in context.Request)
-                for (int i = 0; i < ar.Length; i++)
+                for (int i = 0; i < context.Request.Count; i++)
                 {
                     try
                     {
-                        var ser = ar[i].Value as TestPersonSerialized;
-
-                        if (ser != null)
+                      var item =  context.Request[i] as ICWObject;
+                        if (item != null)
                         {
-                            var person = PersonSerializeHelper.DoDeConvert(ser);
-                            ar[i] = new KeyValuePair<string, object>(ar[i].Key, person);
+                            var person = PersonSerializeHelper.DoDeConvert(item);
+                            context.Response[i] = person;
                         }
+
+
+                        //if (ser != null)
+                        //{
+                        //    var person = PersonSerializeHelper.DoDeConvert(ser);
+                        //    ar[i] = new KeyValuePair<string, object>(ar[i].Key, person);
+                        //}
                     }
                     catch (Exception)
                     {
@@ -203,93 +209,39 @@ namespace ServiceModel
         public void OnResponse(ref IServerFilterContext context)
         {
 
-
-           var sr = context.ServiceInstance;
-           
-
             if (context.Response.IsProvided)
             {
                 if (context.Response.Count > 0)
                 {
-                    var f = context.Response.First();
 
-                    f    = new KeyValuePair<string, object>("",new object());
-
-
-                   // context.Response["result"] = null; 
-                    context.UserState.Add("", new object());
-
-                    context = new ServerContextWrapper(context);
-                    // KeyValuePair<string, object> st;
-                    //  context.Response["result"] = new TestPersonSerialized();
-
-                    //  var t = (IResponseContext)context.Response.First();
+                    for (int i = 0; i < context.Response.Count; i++)
+                    {
+                        try
+                        {
+                            var item = context.Response[i] as ICWObject;
+                            if (item != null)
+                            {
+                                var ser = PersonSerializeHelper.DoConvert(item);
+                                context.Response[i] = ser;
+                            }
 
 
-                    //foreach (var item in context.Response)
-                    //{
-                    //    st = item;
-                    //}
+                            //if (ser != null)
+                            //{
+                            //    var person = PersonSerializeHelper.DoDeConvert(ser);
+                            //    ar[i] = new KeyValuePair<string, object>(ar[i].Key, person);
+                            //}
+                        }
+                        catch (Exception)
+                        {
 
-                    // st =  KeyValuePair<string, object>("",new object());
-                    //for (int i = 0; i < context.Response.Count; i++)
-                    //{
-                    //    //var item = context.Response[i];
+                            throw;
+                        }
 
-                    //    context.Response.;
-
-                    //}
-
-
-                    //context.Response[0] = new KeyValuePair<string, object>("", new object());
-
-
-                    //context.Response[0] = new object();// new KeyValuePair<string, object>(/*ob.Key*/"", new object());
-
-                    //foreach (var item in context.Response)
-                    //{
-                    //    item = new KeyValuePair<string, object>(ar[i].Key, ser);
-                    //}
-
-
-
-                    //for (int i = 0; i < context.Response.Count; i++)
-                    //{
-                    //   // context.Response[i] = new KeyValuePair<string, object>("", new object());
-
-                    //    try
-                    //    {
-
-                    //        var ob = (KeyValuePair<string, object>)context.Response[i];
-
-                    //        var person = ob.Value as TestPerson;
-
-                    //        if (person != null)
-                    //        {
-                    //            var ser = PersonSerializeHelper.DoConvert(person);
-                    //            context.Response[i] = new KeyValuePair<string, object>(/*ob.Key*/"", new object());
-                    //        }
-                    //    }
-                    //    catch (Exception)
-                    //    {
-
-                    //        throw;
-                    //    }
-                    //}
+                    }
 
                 }
             }
-            else
-            {
-                // warn: the service method was not called
-                //logger.LogWarning(message.ToString());
-            }
-
-            // log server stream in case of Server/Duplex streaming
-
-
-            // log output
-            //LogEnd(logger, context.Response);
         }
 
         public void OnError(IServerFilterContext context, Exception error)

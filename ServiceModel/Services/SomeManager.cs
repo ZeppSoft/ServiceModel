@@ -66,7 +66,7 @@ namespace ServiceModel.Services
             return new PenaltyAmount { Amount = 333, Tax= 50 };
         }
 
-        public TestPerson GetTestPerson()
+        public ICWObject GetTestPerson()
         {
            return new TestPerson() {FirstName ="John",LastName = "Tiner" };
         }

@@ -38,7 +38,7 @@ namespace Shared.Interfaces
         Complex GetComplexObject();
 
         [OperationContract]
-        TestPerson GetTestPerson();
+        ICWObject GetTestPerson();
     }
 
 
@@ -64,14 +64,51 @@ namespace Shared.Interfaces
         public decimal Amount { get; set;}
         public decimal Tax { get; set;} 
     }
-    public class TestPerson
+
+
+   
+    public class TestPerson : ICWObject
     {
         public string FirstName { get; set;}
         public string LastName { get; set;}
+
+        public bool IsDirty => throw new NotImplementedException();
+
+        public bool WasRemoved => throw new NotImplementedException();
+
+        public object ID { get ; set; }
+        public string Title { get; set; }
+
+        public void SetUpdated()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetUpdated(bool value)
+        {
+            throw new NotImplementedException();
+        }
     }
 
-    public class TestPersonSerialized
+    public class TestPersonSerialized : ICWObject
     {
         public string Name { get; set; }
+
+        public bool IsDirty => throw new NotImplementedException();
+
+        public bool WasRemoved => throw new NotImplementedException();
+
+        public object ID { get; set; }
+        public string Title { get; set; }
+
+        public void SetUpdated()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetUpdated(bool value)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

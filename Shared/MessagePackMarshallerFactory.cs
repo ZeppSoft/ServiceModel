@@ -72,7 +72,7 @@ namespace Shared
         {
 
             IReadOnlyList<IMessagePackFormatter> formatters = 
-                new List<IMessagePackFormatter> { MessagePack.Formatters.TypelessFormatter.Instance, new CWObjectFormatter() };
+                new List<IMessagePackFormatter> { MessagePack.Formatters.TypelessFormatter.Instance/*, new CWObjectFormatter()*/ };
 
 
 
@@ -107,7 +107,7 @@ namespace Shared
             //new[] { ContractlessStandardResolver.Instance });
 
             IReadOnlyList<IMessagePackFormatter> formatters =
-                new List<IMessagePackFormatter> { MessagePack.Formatters.TypelessFormatter.Instance, new CWObjectFormatter()};
+                new List<IMessagePackFormatter> { MessagePack.Formatters.TypelessFormatter.Instance/*, new CWObjectFormatter()*/};
 
 
 
@@ -388,20 +388,58 @@ namespace Shared
 
     public static class PersonSerializeHelper
     {
-        public static TestPersonSerialized DoConvert(TestPerson person)
+        public static ICWObject DoConvert(ICWObject item)
         {
-            var ser = new TestPersonSerialized();
-            ser.Name = person.FirstName + "_" + person.LastName;
-            return ser;
+            try
+            {
+                TestPerson person = item as TestPerson;
+
+                if (person != null)
+                {
+                    TestPersonSerialized ser = new TestPersonSerialized();
+
+                    ser.Name = person.FirstName + "_" + person.LastName;
+                    return ser;
+                }
+                else
+                    throw new InvalidCastException($"item of type {item.GetType()} cannot be casted to {typeof(TestPerson)}") ;
+               
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+          
         }
 
-        public static TestPerson DoDeConvert(TestPersonSerialized ser)
+        public static ICWObject DoDeConvert(ICWObject item)
         {
-            string[] words = ser.Name.Split('_');
-            var person = new TestPerson();
-            person.FirstName = words[0];
-            person.LastName = words[1];
-            return person;
+            try
+            {
+                TestPersonSerialized ser  = item as TestPersonSerialized;
+
+                if (ser != null)
+                {
+                    string[] words = ser.Name.Split('_');
+                    var person = new TestPerson();
+                    person.FirstName = words[0];
+                    person.LastName = words[1];
+                    return person;
+                }
+                else
+                    throw new InvalidCastException($"item of type {item.GetType()} cannot be casted to {typeof(TestPersonSerialized)}");
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+
+           
         }
     }
 
