@@ -1,9 +1,9 @@
-using GrpcService3.Services;
 using MessagePack;
 using MessagePack.Formatters;
 using MessagePack.Resolvers;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.DependencyInjection;
+using ServiceModel.Services;
 using Shared;
 using Shared.Interfaces;
 using System.IO.Compression;
@@ -54,7 +54,7 @@ namespace GrpcService3
 
 
 
-            builder.Services.AddSingleton<ISomeManager>(new SomeManager());
+            //builder.Services.AddSingleton<ISomeManager>(new SomeManager());
 
 
 
@@ -78,15 +78,6 @@ namespace GrpcService3
             var opt = MessagePackSerializerOptions.Standard.WithResolver(resolver);
 
 
-
-
-
-
-
-
-
-
-
             // enable ServiceModel.Grpc
             builder.Services
                  .AddServiceModelGrpcServiceOptions<SomeManager>(options =>
@@ -95,12 +86,6 @@ namespace GrpcService3
                  });
 
             builder.Services.AddServiceModelGrpc();
-            //builder.Services.AddServiceModelGrpc(options =>
-            // {
-            //     // set MessagePackMarshaller as default Marshaller
-            //     options.DefaultMarshallerFactory = MessagePackMarshallerFactory.Default;
-            // });
-
 
 
             var app = builder.Build();
@@ -114,18 +99,12 @@ namespace GrpcService3
                 endpoints.MapGrpcService<SomeManager>().EnableGrpcWeb();
             });
 
-            //app.UseGrpcWeb
-            // app.Services.GetServices
 
             // Configure the HTTP request pipeline.
            // app.MapGrpcService<SomeManager>();
             app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 
-           
-
             app.Run();
-
-           
         }
     }
 }

@@ -23,7 +23,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ServiceModel\Server.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>
