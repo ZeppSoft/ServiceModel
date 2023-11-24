@@ -245,6 +245,9 @@ namespace Client
             var person = _sm.GetTestPerson();
             var penalties = _sm.GetPenalty("123");
 
+            var nPerson = person as TestPerson;
+
+            var name = nPerson.LastName;
 
 
             //var co = _sm.GetComplexObject();
