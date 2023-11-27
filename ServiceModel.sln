@@ -13,7 +13,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientNet1", "ClientNet1\Cl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerNet2", "ServerNet2\ServerNet2.csproj", "{6B8F8939-F95C-4033-8E10-BDBE6D2B538C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrpcService3", "GrpcService3\GrpcService3.csproj", "{ABDDF9FC-D3BB-49A6-B0A4-358D76E23049}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrpcService3", "GrpcService3\GrpcService3.csproj", "{ABDDF9FC-D3BB-49A6-B0A4-358D76E23049}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceNetConsole5", "ServiceNetConsole5\ServiceNetConsole5.csproj", "{3DB8E443-B269-485A-B261-2AA51743FA94}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{ABDDF9FC-D3BB-49A6-B0A4-358D76E23049}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ABDDF9FC-D3BB-49A6-B0A4-358D76E23049}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ABDDF9FC-D3BB-49A6-B0A4-358D76E23049}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DB8E443-B269-485A-B261-2AA51743FA94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DB8E443-B269-485A-B261-2AA51743FA94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DB8E443-B269-485A-B261-2AA51743FA94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DB8E443-B269-485A-B261-2AA51743FA94}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
